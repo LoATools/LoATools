@@ -122,6 +122,10 @@ $('.negative-engraving-select').on("select2:open", function (e) {
     document.querySelector('.select2-search__field').focus();
 });
 
+$('.stat-select').on("select2:open", function (e) {
+    document.querySelector('.select2-search__field').focus();
+});
+
 var oldValue;
 
 $('.engraving-select, .negative-engraving-select').on("select2:selecting", function (e) {
@@ -177,6 +181,8 @@ $("#import-button").on("click", function (e) {
         $('#import-text').focus();
         return;
     }
+    importString = importString.replace("Import me on https://www.loatools.com/lost-ark-engraving-planner:", "");
+    importString = importString.trim();
     importFromString(importString);
     $("#import-text").val('');
     $("#importModal .btn-close").click();
@@ -239,7 +245,7 @@ $("#text-clipboard-button").on("click", function (e) {
 });
 
 $("#reset-button").on("click", function (e) {
-    importFromString("HYe2FMBpQ6ymD51olTXLdrvP40PUgAZTyzKLqrabrJGnnGg");
+    importFromString("HYe2FMBpQ6ymD51olTXLdrvP40PUgAZTyzKLqrabrJGnGcDjWpmg");
     $("#resetModal .btn-close").click();
 });
 
@@ -410,12 +416,12 @@ function updateDisplay() {
 function importFromString(importString) {
     importString = LZString.decompressFromEncodedURIComponent(importString);
     importString = importString.split(',');
-    window.engravingSetup = new Map();
     var index = 0;
 
     var engravings = $(".engraving-select, .negative-engraving-select");
     for (var i = 0; i < engravings.length; i++) {
         if (importString[index]) {
+            oldValue = $(engravings[i]).val();
             $(engravings[i]).val(importString[index]);
             $(engravings[i]).val(importString[index]).trigger('change');
             $(engravings[i]).trigger({
@@ -431,6 +437,7 @@ function importFromString(importString) {
     var values = $(".value-select");
     for (var i = 0; i < values.length; i++) {
         if (importString[index]) {
+            oldValue = parseInt($(values[i]).val());
             $(values[i]).val(importString[index]);
             $(values[i]).val(importString[index]).trigger('change');
             $(values[i]).trigger({
