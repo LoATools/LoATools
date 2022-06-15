@@ -100,10 +100,12 @@ $(document).ready(function () {
         theme: 'bootstrap-5',
         width: '100%'
     });
+    $('.stat-select').select2({
+        theme: 'bootstrap-5',
+        width: '100%'
+    });
     var params = new URLSearchParams(window.location.search);
     if (params.has("importCode")) {
-        console.log("aaa")
-        console.log(params.get("importCode"));
         importFromString(params.get("importCode"));
     }
 });
@@ -124,7 +126,6 @@ var oldValue;
 
 $('.engraving-select, .negative-engraving-select').on("select2:selecting", function (e) {
     oldValue = $($(e.currentTarget).find(":selected")[0]).attr("value");
-    console.log("aaa - " + oldValue);
 });
 
 $('.engraving-select, .negative-engraving-select').on("select2:select", function (e) {
@@ -139,7 +140,6 @@ $('.engraving-select, .negative-engraving-select').on("select2:select", function
 
 $('.value-select').on("select2:selecting", function (e) {
     oldValue = parseInt($($(e.currentTarget).find(":selected")[0]).attr("value"));
-    console.log("bbb - " + oldValue);
 });
 
 $('.value-select').on("select2:select", function (e) {
@@ -208,6 +208,14 @@ $("#export-button").on("click", function (e) {
         }
         exportString += ","
     }
+    var stats = $(".stat-select");
+    for (var i = 0; i < stats.length; i++) {
+        var value = $(stats[i]).val();
+        if (value) {
+            exportString += value;
+        }
+        exportString += ","
+    }
     var qualities = $(".quality-input");
     for (var i = 0; i < qualities.length; i++) {
         var value = $(qualities[i]).val();
@@ -241,6 +249,15 @@ function populateEngravingDropdown() {
         lines += "<option value=\"" + engravings[engraving].id + "\">" + engravings[engraving].name + "</option><br>";
     }
     $(".engraving-select").html(lines);
+    lines = "<option value=\"none\" selected=\"selected\" hidden=\"hidden\">Engraving</option><br>";
+    for (engraving in window.engravings) {
+        if (engravings[engraving].type == "class") {
+            continue;
+        }
+        lines += "<option value=\"" + engravings[engraving].id + "\">" + engravings[engraving].name + "</option><br>";
+    }
+    $($(".engraving-select").get(12)).html(lines);
+    $($(".engraving-select").get(13)).html(lines);
 }
 
 function populateNegativeEngravingDropdown() {
@@ -432,6 +449,15 @@ function importFromString(importString) {
         index++;
     }
     prices.first().trigger("keyup");
+
+    var stats = $(".stat-select");
+    for (var i = 0; i < stats.length; i++) {
+        if (importString[index]) {
+            $(stats[i]).val(importString[index]);
+            $(stats[i]).val(importString[index]).trigger('change');
+        }
+        index++;
+    }
 
     var qualities = $(".quality-input");
     for (var i = 0; i < qualities.length; i++) {
