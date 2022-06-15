@@ -311,9 +311,9 @@ function updateDisplay() {
         sortedMap.push([key, window.engravingSetup.get(key)]);
     }
     sortedMap.sort(function (a, b) {
-        engravingA = getEngravingByID(a[0]);
-        engravingB = getEngravingByID(b[0]);
-        if (engravingA.type == engravingB.type) {
+        var engravingA = getEngravingByID(a[0]);
+        var engravingB = getEngravingByID(b[0]);
+        if ((engravingA.type == "combat" || engravingA.type == "class") && (engravingB.type == "combat" || engravingB.type == "class")) {
             return b[1] - a[1];
         }
         if (engravingB.type == "negative" && (engravingA.type == "combat" || engravingA.type == "class")) {
