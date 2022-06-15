@@ -313,7 +313,7 @@ function updateDisplay() {
     sortedMap.sort(function (a, b) {
         var engravingA = getEngravingByID(a[0]);
         var engravingB = getEngravingByID(b[0]);
-        if ((engravingA.type == "combat" || engravingA.type == "class") && (engravingB.type == "combat" || engravingB.type == "class")) {
+        if ((engravingA.type == engravingB.type) || ((engravingA.type == "combat" || engravingA.type == "class") && (engravingB.type == "combat" || engravingB.type == "class"))) {
             return b[1] - a[1];
         }
         if (engravingB.type == "negative" && (engravingA.type == "combat" || engravingA.type == "class")) {
